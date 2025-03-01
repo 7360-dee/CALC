@@ -6,7 +6,8 @@
     <title>AI Chatbot & Calculator</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        #chatbox, #calculator { width: 100%; max-width: 400px; margin: 20px auto; padding: 10px; border: 1px solid #ccc; text-align: left; display: none; }
+        #chatbox, #calculator, #userInput, button[onclick="sendMessage()"] { display: none; }
+        #chatbox, #calculator { width: 100%; max-width: 400px; margin: 20px auto; padding: 10px; border: 1px solid #ccc; text-align: left; }
         #userInput, #num1, #num2 { width: 80%; padding: 10px; }
         button { padding: 10px; margin: 5px; }
     </style>
@@ -15,7 +16,7 @@
     <h2>AI Chatbot & Calculator</h2>
 
     <div id="menu">
-        <button onclick="showCalculator('add')">Social Justice Calculator</button>
+        <button onclick="showCalculator()">Social Justice Calculator</button>
         <button onclick="showChatbot()">ChatBot</button>
     </div>
 
@@ -34,7 +35,35 @@
     </div>
 
     <script>
-        function showCalculator(operation) {
+        const responses = {
+            "hello": "Hello! How can I assist you with social justice today?",
+            "social justice": "Social justice refers to the fair and equitable distribution of resources, opportunities, and privileges within a society. It aims to eliminate systemic barriers and discrimination.",
+            "equity": "Equity ensures that everyone receives the support they need to achieve equal outcomes, recognizing that different people have different needs.",
+            "discrimination": "Discrimination is the unfair treatment of individuals based on characteristics such as race, gender, or socioeconomic status. Social justice seeks to eliminate it.",
+            "inclusion": "Inclusion ensures that all individuals, regardless of background, have a voice and representation in society.",
+            "how do i improve social justice": "You can promote social justice through individual actions, community involvement, and policy advocacy.",
+            "feminism": "Feminism is a movement advocating for gender equality. It fights for equal rights and opportunities for all genders."
+        };
+
+        function sendMessage() {
+            let input = document.getElementById("userInput").value.toLowerCase();
+            let chatbox = document.getElementById("chatbox");
+
+            chatbox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+
+            let response = "Please ask about social justice.";
+            for (let key in responses) {
+                if (input.includes(key)) {
+                    response = responses[key];
+                    break;
+                }
+            }
+
+            chatbox.innerHTML += `<p><strong>ChatBot:</strong> ${response}</p>`;
+            document.getElementById("userInput").value = "";
+        }
+
+        function showCalculator() {
             document.getElementById('chatbox').style.display = 'none';
             document.getElementById('userInput').style.display = 'none';
             document.querySelector("button[onclick='sendMessage()']").style.display = 'none';
@@ -46,6 +75,20 @@
             document.getElementById('chatbox').style.display = 'block';
             document.getElementById('userInput').style.display = 'inline-block';
             document.querySelector("button[onclick='sendMessage()']").style.display = 'inline-block';
+        }
+
+        function calculate(operation) {
+            let num1 = parseFloat(document.getElementById("num1").value);
+            let num2 = parseFloat(document.getElementById("num2").value);
+            let resultElement = document.getElementById("result");
+
+            if (isNaN(num1) || isNaN(num2)) {
+                resultElement.textContent = "Invalid input!";
+                return;
+            }
+
+            let result = operation === 'add' ? num1 + num2 : num1 * num2;
+            resultElement.textContent = `Result: ${result}`;
         }
     </script>
 </body>
