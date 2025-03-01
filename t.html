@@ -6,7 +6,7 @@
     <title>AI Chatbot & Calculator</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        #chatbox, #calculator, #userInput, button[onclick="sendMessage()"] { display: none; }
+        #chatbox, #calculator, #userInput, #sendBtn { display: none; }
         #chatbox, #calculator { width: 100%; max-width: 400px; margin: 20px auto; padding: 10px; border: 1px solid #ccc; text-align: left; }
         #userInput, #num1, #num2 { width: 80%; padding: 10px; }
         button { padding: 10px; margin: 5px; }
@@ -21,8 +21,9 @@
     </div>
 
     <div id="chatbox">
+        <div id="messages"></div>
         <input type="text" id="userInput" placeholder="Type a message...">
-        <button onclick="sendMessage()">Send</button>
+        <button id="sendBtn" onclick="sendMessage()">Send</button>
     </div>
 
     <h3>Calculator</h3>
@@ -47,10 +48,12 @@
 
         function sendMessage() {
             let input = document.getElementById("userInput").value.toLowerCase();
-            let chatbox = document.getElementById("chatbox");
+            let messages = document.getElementById("messages");
 
-            chatbox.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
+            // Append user message
+            messages.innerHTML += `<p><strong>You:</strong> ${input}</p>`;
 
+            // Default response
             let response = "Please ask about social justice.";
             for (let key in responses) {
                 if (input.includes(key)) {
@@ -59,14 +62,15 @@
                 }
             }
 
-            chatbox.innerHTML += `<p><strong>ChatBot:</strong> ${response}</p>`;
-            document.getElementById("userInput").value = "";
+            // Append chatbot response
+            messages.innerHTML += `<p><strong>ChatBot:</strong> ${response}</p>`;
+            document.getElementById("userInput").value = ""; // Clear input
         }
 
         function showCalculator() {
             document.getElementById('chatbox').style.display = 'none';
             document.getElementById('userInput').style.display = 'none';
-            document.querySelector("button[onclick='sendMessage()']").style.display = 'none';
+            document.getElementById('sendBtn').style.display = 'none';
             document.getElementById('calculator').style.display = 'block';
         }
 
@@ -74,7 +78,7 @@
             document.getElementById('calculator').style.display = 'none';
             document.getElementById('chatbox').style.display = 'block';
             document.getElementById('userInput').style.display = 'inline-block';
-            document.querySelector("button[onclick='sendMessage()']").style.display = 'inline-block';
+            document.getElementById('sendBtn').style.display = 'inline-block';
         }
 
         function calculate(operation) {
